@@ -1,23 +1,38 @@
+import pytest
 from src.main import add
 
-def test_add():
+
+def test_add_valid_integers():
     assert add(7, 2) == 9
-    assert add(5, "2", 3) == "error"
-    assert add("2", "8.2") == "error"
-    assert add("8", "1", 3.6) == 84
-    assert add("1", "2") == 12
-    assert add("3", "4", "5") == 39
-    assert add(2.6, "4", None) == "error"
-    assert add(2.5, 3, "5.1") == "error"
-    assert add(5.4, 9.8) == 15
-    assert add("1.4", "2", 3) == "error"
-    assert add(2.5, 3, "x") == "error"
-    assert add(2.1, 9.3, 3.7) == 14
     assert add(1, 6, 3) == 10
-    assert add(1.6, 2.1) == 3
-    assert add(3.1, 2) == 5
-    assert add(1.9, 4.3, "2.6") == "error"
-    assert add("1", "2", 9) == 21
-    assert add("4", "2.4", 1) == "error"
-    assert add(None, 3, "5.1") == "error"
-    assert add("b", 4, 5) == "error"
+    assert add(0, 0, 0) == 0
+    assert add(10, 0, 0) == 10
+    assert add(10, 10, 10) == 30
+
+
+def test_add_valid_floats():
+    assert add(1.5, 2.5) == 4.0
+    assert add(1.2, 3.4, 5.6) == 10.2
+    assert add(0.0, 10.0, 0.0) == 10.0
+
+
+def test_add_type_error_returns_minus_1():
+    assert add("1", 2) == -1
+    assert add(1, "2", 3) == -1
+    assert add(1, 2, "3") == -1
+    assert add(None, 2, 3) == -1
+    assert add(1, None, 3) == -1
+    assert add(1, 2, None) == -1
+
+
+def test_add_out_of_range_returns_minus_2():
+    assert add(-0.1, 2, 3) == -2
+    assert add(0, 10.1, 0) == -2
+    assert add(0, 0, 11) == -2
+    assert add(10, 10, -1) == -2
+
+
+def test_add_type_error_priority_over_range():
+    # 型がダメなら -1（範囲以前）
+    assert add("100", 2, 3) == -1
+    assert add(1, 2, "11") == -1
