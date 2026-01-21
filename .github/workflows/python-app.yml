@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - advance
 
 jobs:
   test:
